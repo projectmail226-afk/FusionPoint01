@@ -18,6 +18,7 @@
     "inngest": "^3.46.0",
     "mongoose": "^9.0.0",
     "multer": "^2.0.2",
+    "serialize-error-cjs": "^0.2.0",
     "serverless-http": "^4.0.0"
   },
   "devDependencies": {
