@@ -4,7 +4,6 @@ import 'dotenv/config';
 import connectDB from './configs/db.js';
 import {inngest, functions} from './inngest/index.js'
 import {serve} from 'inngest/express'
-import serverless from 'serverless-http';
 
 const app =express();
 
