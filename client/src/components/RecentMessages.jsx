@@ -16,47 +16,56 @@ const RecentMessages = () => {
   }, [])
 
   return (
-    <div className='bg-white max-w-xs mt-4 p-4 min-h-20 rounded-md shadow text-xs text-slate-800'>
-      <h3 className='font-semibold text-slate-800 mb-4'>Recent Messages</h3>
+    <div className="bg-white max-w-xs mt-4 p-4 min-h-20 rounded-md shadow text-xs text-slate-800">
 
-      <div className='flex flex-col max-h-56 overflow-y-scroll no-scrollbar'>
-        {
-          messages.map((message, index) => (
-            <Link 
-              to={`/messages/${message.from_user_id._id}`} 
-              key={index} 
-              className='flex items-start gap-2 py-2 hover:bg-slate-100'
-            >
-              <img 
-                src={message.from_user_id.profile_picture} 
-                alt='' 
-                className='w-8 h-8 rounded-full'
-              />
+      <h3 className="font-semibold text-slate-800 mb-4">Recent Messages</h3>
 
-              <div className='w-full'>
-                <div className='flex justify-between'>
-                  <p className='font-medium'>{message.from_user_id.full_name}</p>
-                  <p className='text-[10px] text-slate-400'>
-                    {moment(message.createdAt).fromNow()}
-                  </p>
-                </div>
+      {/* List Container */}
+      <div className="flex flex-col max-h-56 overflow-y-scroll no-scrollbar divide-y">
 
-                <div className='flex justify-between'>
-                  <p className='text-gray-500'>
-                    {message.text ? message.text : 'media'}
-                  </p>
+        {messages.map((message, index) => (
+          <Link
+            to={`/messages/${message.from_user_id._id}`}
+            key={index}
+            className="flex items-start gap-2 py-2 px-1 hover:bg-slate-100 rounded transition cursor-pointer"
+          >
 
-                  {!message.seen && (
-                    <p className='bg-indigo-500 text-white w-4 h-4 flex items-center justify-center rounded-full text-[10px]'>
-                      1
-                    </p>
-                  )}
-                </div>
+            {/* Avatar */}
+            <img
+              src={message.from_user_id.profile_picture}
+              alt=""
+              className="w-8 h-8 rounded-full object-cover"
+            />
+
+            {/* Message Info */}
+            <div className="w-full">
+
+              <div className="flex justify-between">
+                <p className="font-medium truncate pr-2">
+                  {message.from_user_id.full_name}
+                </p>
+                <p className="text-[10px] text-slate-400 whitespace-nowrap">
+                  {moment(message.createdAt).fromNow()}
+                </p>
               </div>
 
-            </Link>
-          ))
-        }
+              <div className="flex justify-between items-center mt-0.5">
+                <p className="text-gray-500 truncate">
+                  {message.text ? message.text : 'media'}
+                </p>
+
+                {!message.seen && (
+                  <span className="bg-indigo-500 text-white min-w-4 min-h-4 flex items-center justify-center rounded-full text-[10px]">
+                    1
+                  </span>
+                )}
+              </div>
+
+            </div>
+
+          </Link>
+        ))}
+
       </div>
     </div>
   )

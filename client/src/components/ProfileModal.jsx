@@ -5,6 +5,7 @@ import { Pencil } from 'lucide-react';
 const ProfileModal = ({ setShowEdit }) => {
 
   const user = dummyUserData;
+
   const [editForm, setEditForm] = useState({
     username: user.username,
     bio: user.bio,
@@ -16,42 +17,53 @@ const ProfileModal = ({ setShowEdit }) => {
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
-  }
+  };
 
   return (
-    <div className='fixed top-0 bottom-0 left-0 right-0 z-110 h-screen overflow-y-scroll bg-black/50'>
-      <div className='max-w-2xl sm:py-6 mx-auto'>
+    <div className='fixed inset-0 z-110 bg-black/50 overflow-y-auto'>
+      <div className='max-w-2xl mx-auto sm:py-6'>
         <div className='bg-white rounded-lg shadow p-6'>
 
-          <h1 className='text-2xl font-bold text-gray-900 mb-6'>Edit Profile</h1>
+          <h1 className='text-2xl font-bold text-gray-900 mb-6'>
+            Edit Profile
+          </h1>
 
           <form className='space-y-4' onSubmit={handleSaveProfile}>
 
             {/* Profile Picture */}
             <div className='flex flex-col items-start gap-3'>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-medium text-gray-700'>
                 Profile Picture
               </label>
 
               <input
                 hidden
-                type="file"
+                type='file'
                 accept='image/*'
-                id="profile_picture"
-                onChange={(e) => setEditForm({ ...editForm, profile_picture: e.target.files[0] })}
+                id='profile_picture'
+                onChange={(e) =>
+                  setEditForm({
+                    ...editForm,
+                    profile_picture: e.target.files?.[0] || null
+                  })
+                }
               />
 
-              {/* CLICKABLE IMAGE */}
               <label
-                htmlFor="profile_picture"
+                htmlFor='profile_picture'
                 className='group/profile relative mt-2 w-fit cursor-pointer'
               >
                 <img
-                  src={editForm.profile_picture ? URL.createObjectURL(editForm.profile_picture) : user.profile_picture}
-                  alt=""
+                  src={
+                    editForm.profile_picture
+                      ? URL.createObjectURL(editForm.profile_picture)
+                      : user.profile_picture
+                  }
+                  alt=''
                   className='w-24 h-24 rounded-full object-cover'
                 />
-                <div className='absolute inset-0 bg-black/20 rounded-full hidden group-hover/profile:flex items-center justify-center'>
+
+                <div className='absolute inset-0 bg-black/25 rounded-full hidden group-hover/profile:flex items-center justify-center transition'>
                   <Pencil className='w-5 h-5 text-white' />
                 </div>
               </label>
@@ -59,28 +71,39 @@ const ProfileModal = ({ setShowEdit }) => {
 
             {/* Cover Photo */}
             <div className='flex flex-col items-start gap-3'>
-              <label htmlFor="cover_photo" className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-medium text-gray-700'>
                 Cover Photo
               </label>
 
               <input
                 hidden
-                type="file"
+                type='file'
                 accept='image/*'
-                id="cover_photo"
-                onChange={(e) => setEditForm({ ...editForm, cover_photo: e.target.files[0] })}
+                id='cover_photo'
+                onChange={(e) =>
+                  setEditForm({
+                    ...editForm,
+                    cover_photo: e.target.files?.[0] || null
+                  })
+                }
               />
 
               <label
-                htmlFor="cover_photo"
+                htmlFor='cover_photo'
                 className='relative group/cover cursor-pointer w-fit'
               >
                 <img
-                  src={editForm.cover_photo ? URL.createObjectURL(editForm.cover_photo) : user.cover_photo}
-                  alt=""
-                  className='w-80 h-40 rounded-lg bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 object-cover mt-2'
+                  src={
+                    editForm.cover_photo
+                      ? URL.createObjectURL(editForm.cover_photo)
+                      : user.cover_photo ||
+                        'https://via.placeholder.com/800x300?text=Cover+Photo'
+                  }
+                  alt=''
+                  className='w-80 h-40 mt-2 object-cover rounded-lg bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200'
                 />
-                <div className='absolute inset-0 bg-black/20 rounded-lg hidden group-hover/cover:flex items-center justify-center'>
+
+                <div className='absolute inset-0 bg-black/20 rounded-lg hidden group-hover/cover:flex items-center justify-center transition'>
                   <Pencil className='w-5 h-5 text-white' />
                 </div>
               </label>
@@ -88,68 +111,74 @@ const ProfileModal = ({ setShowEdit }) => {
 
             {/* Full Name */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-medium text-gray-700'>
                 Name
               </label>
-              <input 
-                type="text"
+              <input
+                type='text'
                 className='w-full p-3 border border-gray-200 rounded-lg'
                 placeholder='Please enter your full name'
-                onChange={(e) => setEditForm({ ...editForm, full_name: e.target.value })}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, full_name: e.target.value })
+                }
                 value={editForm.full_name}
               />
             </div>
 
             {/* Username */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-medium text-gray-700'>
                 Username
               </label>
-              <input 
-                type="text"
+              <input
+                type='text'
                 className='w-full p-3 border border-gray-200 rounded-lg'
                 placeholder='Please enter a username'
-                onChange={(e) => setEditForm({ ...editForm, username: e.target.value })}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, username: e.target.value })
+                }
                 value={editForm.username}
               />
             </div>
 
             {/* Bio */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-medium text-gray-700'>
                 Bio
               </label>
               <textarea
                 rows={3}
-                type="text"
                 className='w-full p-3 border border-gray-200 rounded-lg'
                 placeholder='Please enter a short Bio'
-                onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, bio: e.target.value })
+                }
                 value={editForm.bio}
               />
             </div>
 
             {/* Location */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-medium text-gray-700'>
                 Location
               </label>
-              <input 
-                type="text"
+              <input
+                type='text'
                 className='w-full p-3 border border-gray-200 rounded-lg'
                 placeholder='Please enter your location'
-                onChange={(e) => setEditForm({ ...editForm, location: e.target.value })}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, location: e.target.value })
+                }
                 value={editForm.location}
               />
             </div>
 
             {/* Buttons */}
             <div className='flex justify-end space-x-3 pt-6'>
-
               <button
-                onClick={() => setShowEdit(false)}
                 type='button'
-                className='px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer'
+                onClick={() => setShowEdit(false)}
+                className='px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition cursor-pointer'
               >
                 Cancel
               </button>
@@ -160,7 +189,6 @@ const ProfileModal = ({ setShowEdit }) => {
               >
                 Save Changes
               </button>
-
             </div>
 
           </form>

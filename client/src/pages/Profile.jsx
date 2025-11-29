@@ -23,17 +23,17 @@ const Profile = () => {
     fetchUser()
   }, [])
 
-  return user ? (
-    <div className='relative h-full overflow-y-scroll bg-gray-50 p-6'>
-      <div className='max-w-3xl mx-auto'>
+  if (!user) return <Loading />
 
+  return (
+    <div className="relative h-full overflow-y-scroll bg-gray-50 p-6">
+      <div className="max-w-3xl mx-auto">
         {/* Profile card */}
-        <div className='bg-white rounded-2xl shadow overflow-hidden'>
-
+        <div className="bg-white rounded-2xl shadow overflow-hidden">
           {/* Cover Photo */}
-          <div className='h-40 md:h-56 bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200'>
+          <div className="h-40 md:h-56 bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200">
             {user.cover_photo && (
-              <img src={user.cover_photo} alt='' className='w-full h-full object-cover'/>
+              <img src={user.cover_photo} alt="" className="w-full h-full object-cover" />
             )}
           </div>
 
@@ -42,17 +42,19 @@ const Profile = () => {
             user={user}
             posts={posts}
             profileId={profileId}
-            setShowEdit={setShowEdit} />
+            setShowEdit={setShowEdit}
+          />
         </div>
 
         {/* Tabs */}
-        <div className='mt-6'>
-          <div className='bg-white rounded-xl shadow p-1 flex max-w-md mx-auto'>
+        <div className="mt-6">
+          <div className="bg-white rounded-xl shadow p-1 flex max-w-md mx-auto">
             {['posts', 'media', 'likes'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${ activeTab === tab
+                className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+                  activeTab === tab
                     ? 'bg-indigo-600 text-white'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
@@ -64,7 +66,7 @@ const Profile = () => {
 
           {/* POSTS TAB */}
           {activeTab === 'posts' && (
-            <div className='mt-6 flex flex-col items-center gap-6'>
+            <div className="mt-6 flex flex-col items-center gap-6">
               {posts.map((post) => (
                 <PostCard key={post._id} post={post} />
               ))}
@@ -73,23 +75,29 @@ const Profile = () => {
 
           {/* MEDIA TAB */}
           {activeTab === 'media' && (
-            <div className='flex flex-wrap mt-6 max-w-6xl gap-4'>
-              {posts.filter((post) => post.image_urls?.length > 0).map((post) =>
-                post.image_urls.map((image, index) => (
-                  <Link
-                    key={index}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    to={image}
-                    className='relative group'
-                  >
-                    <img src={image} className='w-64 aspect-video object-cover rounded-md' alt=''/>
-                    <p className='absolute bottom-0 right-0 text-xs p-1 px-3 backdrop-blur-xl text-white opacity-0 group-hover:opacity-100 transition duration-300'>
-                      Posted {moment(post.createdAt).fromNow()}
-                    </p>
-                  </Link>
-                ))
-              )}
+            <div className="flex flex-wrap mt-6 max-w-6xl gap-4">
+              {posts
+                .filter((post) => post.image_urls?.length > 0)
+                .map((post) =>
+                  post.image_urls.map((image, index) => (
+                    <Link
+                      key={index}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      to={image}
+                      className="relative group"
+                    >
+                      <img
+                        src={image}
+                        className="w-64 aspect-video object-cover rounded-md"
+                        alt=""
+                      />
+                      <p className="absolute bottom-0 right-0 text-xs p-1 px-3 backdrop-blur-xl text-white opacity-0 group-hover:opacity-100 transition duration-300">
+                        Posted {moment(post.createdAt).fromNow()}
+                      </p>
+                    </Link>
+                  ))
+                )}
             </div>
           )}
         </div>
@@ -98,8 +106,6 @@ const Profile = () => {
       {/* Edit Profile Modal */}
       {showEdit && <ProfileModal setShowEdit={setShowEdit} />}
     </div>
-  ) : (
-    <Loading />
   )
 }
 
