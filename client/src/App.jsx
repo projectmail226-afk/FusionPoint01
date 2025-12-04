@@ -14,7 +14,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 import { fetchUser } from './features/user/userSlice.js'
 import { fetchConnections } from './features/connections/connectionsSlice.js'
-import { addMessage } from './features/messages/messagesSlice.js'
+import { addMessages } from './features/messages/messagesSlice.js'
 import Notification from './components/Notification.jsx'
 
 const App = () => {
@@ -49,9 +49,11 @@ const App = () => {
       eventSource.onmessage = (event) => {
         const message = JSON.parse(event.data)
 
+        // If user is currently chatting with this person
         if (pathnameRef.current === '/messages/' + message.from_user_id._id) {
-          dispatch(addMessage(message))
+          dispatch(addMessages(message))   // FIXED
         } else {
+          // Otherwise show notification popup
           toast.custom(
             (t) => <Notification t={t} message={message} />,
             { position: 'bottom-right' }
