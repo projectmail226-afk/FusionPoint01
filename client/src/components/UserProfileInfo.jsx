@@ -6,9 +6,8 @@ const UserProfileInfo = ({user, posts, profileId, setShowEdit}) => {
   return (
     <div className='relative py-4 px-6 md:px-8 bg-white'>
         <div className='flex flex-col md:flex-row items-start gap-6'>
-
             <div className='w-32 h-32 border-4 border-white shadow-lg absolute -top-16 rounded-full'>
-                <img src={user.profile_picture} alt="" className='absolute rounded-full z-10'/>
+                <img src={user.profile_picture} alt="" className='absolute inset-0 w-full h-full rounded-full object-cover z-10'/>
             </div>
 
             <div className='w-full pt-16 md:pt-0 md:pl-36'>
@@ -44,20 +43,19 @@ const UserProfileInfo = ({user, posts, profileId, setShowEdit}) => {
                 <div className='flex items-center gap-6 mt-6 border-t border-gray-200 pt-4'>
                     <div>
                         <span className='sm:text-xl font-bold text-gray-900'>{posts.length}</span>
-                        <span className='text-xs sm:text-sm text-gray-500 ml-1'>Posts</span>
+                        <span className='text-xs sm:text-sm text-gray-500 ml-1.5'>Posts</span>
                     </div>
                     <div>
                         <span className='sm:text-xl font-bold text-gray-900'>{user.followers.length}</span>
-                        <span className='text-xs sm:text-sm text-gray-500 ml-1'>Followers</span>
+                        <span className='text-xs sm:text-sm text-gray-500 ml-1.5'>Followers</span>
                     </div>
                     <div>
                         <span className='sm:text-xl font-bold text-gray-900'>{user.following.length}</span>
-                        <span className='text-xs sm:text-sm text-gray-500 ml-1'>Following</span>
+                        <span className='text-xs sm:text-sm text-gray-500 ml-1.5'>Following</span>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
   )
 }

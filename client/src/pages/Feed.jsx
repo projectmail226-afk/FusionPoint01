@@ -1,33 +1,50 @@
 import React, { useEffect, useState } from 'react'
-import { assets, dummyPostsData } from '../assets/assets'
+import { assets } from '../assets/assets'
 import Loading from '../components/Loading'
 import Storiesbar from '../components/Storiesbar'
 import PostCard from '../components/PostCard'
 import RecentMessages from '../components/RecentMessages'
+import { useAuth } from '@clerk/clerk-react'
+import api from '../api/axios'
+import toast from 'react-hot-toast'
 
 const Feed = () => {
+
   const [feeds, setFeeds] = useState([])
   const [loading, setLoading] = useState(true)
+  const { getToken } = useAuth()
 
-  const fetchFeeds = () => {
-    // Simulated fetch for optimization
-    requestAnimationFrame(() => {
-      setFeeds(dummyPostsData)
-      setLoading(false)
-    })
+  const fetchFeeds = async () => {
+    try {
+      setLoading(true)
+
+      const { data } = await api.get('/api/post/feed', {
+        headers: { Authorization: `Bearer ${await getToken()}` }
+      })
+
+      if (data.success) {
+        setFeeds(data.posts)
+      } else {
+        toast.error(data.message)
+      }
+
+    } catch (error) {
+      toast.error(error.message)
+
+    } finally {
+      setLoading(false)   // ✅ fixed — always executes
+    }
   }
 
   useEffect(() => {
     fetchFeeds()
   }, [])
 
-  if (loading) return <Loading />
+  return !loading ? (
+    <div className="h-full overflow-y-scroll no-scrollbar py-10 xl:pr-5 flex items-start justify-center xl:gap-8">
 
-  return (
-    <div className="h-full overflow-y-scroll no-scrollbar py-10 xl:pr-5 flex items-start justify-center xl:gap-8 transition-all duration-300 ease-out">
-
-      {/* Stories + Posts */}
-      <div className="animate-fadeIn">
+      {/* Stories + Posts list */}
+      <div className="">
         <Storiesbar />
         <div className="p-4 space-y-6">
           {feeds.map((post, index) => (
@@ -37,7 +54,7 @@ const Feed = () => {
       </div>
 
       {/* Right Sidebar */}
-      <div className="max-xl:hidden animate-slideIn">
+      <div className="max-xl:hidden ">
         <div className="max-w-xs bg-white text-xs p-4 rounded-md inline-flex flex-col gap-2 shadow-md border border-slate-200">
           <h3 className="text-slate-800 font-semibold">Sponsored</h3>
           <img
@@ -58,8 +75,9 @@ const Feed = () => {
           <RecentMessages />
         </div>
       </div>
+
     </div>
-  )
+  ) : <Loading />
 }
 
 export default Feed
