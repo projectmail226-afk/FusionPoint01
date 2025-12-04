@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useRef, useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Login from './pages/Login.jsx'
@@ -14,7 +15,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 import { fetchUser } from './features/user/userSlice.js'
 import { fetchConnections } from './features/connections/connectionsSlice.js'
-import { addMessages } from './features/messages/messagesSlice.js'
+import { addMessage } from './features/messages/messagesSlice.js'
 import Notification from './components/Notification.jsx'
 
 const App = () => {
@@ -51,9 +52,8 @@ const App = () => {
 
         // If user is currently chatting with this person
         if (pathnameRef.current === '/messages/' + message.from_user_id._id) {
-          dispatch(addMessages(message))   // FIXED
+          dispatch(addMessage(message))
         } else {
-          // Otherwise show notification popup
           toast.custom(
             (t) => <Notification t={t} message={message} />,
             { position: 'bottom-right' }

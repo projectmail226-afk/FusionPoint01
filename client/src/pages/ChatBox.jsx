@@ -9,7 +9,6 @@ import { addMessage, fetchMessages, resetMessages } from '../features/messages/m
 import toast from 'react-hot-toast'
 
 const ChatBox = () => {
-
   const { messages } = useSelector((state) => state.messages)
   const connections = useSelector((state) => state.connections.connections)
 
@@ -23,7 +22,6 @@ const ChatBox = () => {
 
   const messagesEndRef = useRef(null)
 
-  // Fetch messages
   const fetchUserMessages = async () => {
     try {
       const token = await getToken()
@@ -33,7 +31,6 @@ const ChatBox = () => {
     }
   }
 
-  // Send message
   const sendMessage = async () => {
     try {
       if (!text && !image) return
@@ -61,13 +58,11 @@ const ChatBox = () => {
     }
   }
 
-  // Load messages on change
   useEffect(() => {
     fetchUserMessages()
     return () => dispatch(resetMessages())
   }, [userId])
 
-  // Load selected user details
   useEffect(() => {
     if (connections.length > 0) {
       const found = connections.find((c) => c._id === userId)
@@ -75,15 +70,12 @@ const ChatBox = () => {
     }
   }, [connections, userId])
 
-  // auto scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
   return user && (
     <div className="flex flex-col h-screen">
-
-      {/* Header */}
       <div className="flex items-center gap-2 p-2 md:px-10 xl:pl-42 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-gray-300">
         <img src={user.profile_picture} className="size-8 rounded-full" alt="" />
         <div>
@@ -92,16 +84,14 @@ const ChatBox = () => {
         </div>
       </div>
 
-      {/* Messages */}
       <div className="p-5 md:px-10 flex-1 overflow-y-scroll">
         <div className="space-y-4 max-w-4xl mx-auto">
-
           {messages
             .slice()
             .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-            .map((m, index) => (
+            .map((m, idx) => (
               <div
-                key={index}
+                key={idx}
                 className={`flex flex-col ${m.to_user_id !== user._id ? 'items-start' : 'items-end'}`}
               >
                 <div
@@ -120,7 +110,6 @@ const ChatBox = () => {
         </div>
       </div>
 
-      {/* Input */}
       <div className="px-4">
         <div className="flex items-center gap-3 pl-5 p-1.5 bg-white w-full max-w-xl mx-auto border border-gray-200 shadow rounded-full mb-5">
 
