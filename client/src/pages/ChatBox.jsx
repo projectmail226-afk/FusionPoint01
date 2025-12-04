@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useAuth } from '@clerk/clerk-react'
 import api from '../api/axios.js'
-import { addMessage, fetchMessages, resetMessages } from '../features/messages/messagesSlice.js'
+import { addMessages, fetchMessages, resetMessages } from '../features/messages/messagesSlice.js'
 import toast from 'react-hot-toast'
 
 const ChatBox = () => {
@@ -15,7 +15,7 @@ const ChatBox = () => {
   const dispatch = useDispatch()
 
   const [text, setText] = useState('')
-  const [image, setImage] = useState(null)
+  āt[image, setImage] = useState(null)
   const [user, setUser] = useState(null)
   const messagesEndRef = useRef(null)
 
@@ -47,7 +47,7 @@ const ChatBox = () => {
       if (data.success) {
         setText('')
         setImage(null)
-        dispatch(addMessage(data.message))
+        dispatch(addMessages(data.message))   // FIXED
       } else {
         throw new Error(data.message)
       }
@@ -60,7 +60,7 @@ const ChatBox = () => {
     fetchUserMessages()
 
     return () => {
-      dispatch(resetMessages())       // FIXED
+      dispatch(resetMessages())
     }
   }, [userId])
 
@@ -90,7 +90,7 @@ const ChatBox = () => {
           {
             messages
               .slice()
-              .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))  // FIXED
+              .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
               .map((message, index) => (
                 <div key={index} className={`flex flex-col ${message.to_user_id !== user._id ? 'items-start' : 'items-end'}`}>
                   <div className={`p-2 text-sm max-w-sm bg-white text-slate-700 rounded-lg shadow ${message.to_user_id !== user._id ? 'rounded-bl-none' : 'rounded-br-none'}`}>
