@@ -5,7 +5,9 @@ import Message from '../models/Message.js';
 // ACTIVE SSE CONNECTIONS
 const connections = {};
 
-// SSE Controller
+// =========================
+// 🔥 SSE CONTROLLER (FIXED)
+// =========================
 export const sseController = (req, res) => {
     const { userId } = req.params;
 
@@ -17,12 +19,16 @@ export const sseController = (req, res) => {
 
     console.log("SSE Connected:", userId);
 
+    // Store connection
     connections[userId] = res;
 
-    // initial message
-    res.write(`data: Connected\n\n`);
+    // ❌ PROBLEM: earlier code sent `Connected` (NOT valid JSON)
+    // res.write(`data: Connected\n\n`);
 
-    // on client disconnect
+    // ✅ FIX: Must send valid JSON because frontend uses JSON.parse()
+    res.write(`data: ${JSON.stringify({ status: "connected" })}\n\n`);
+
+    // Disconnect
     req.on('close', () => {
         delete connections[userId];
         console.log("SSE Disconnected:", userId);
@@ -30,7 +36,9 @@ export const sseController = (req, res) => {
     });
 };
 
-// SEND MESSAGE
+// =========================
+// 🔥 SEND MESSAGE
+// =========================
 export const sendMessage = async (req, res) => {
     try {
         const { userId } = req.auth();
@@ -40,7 +48,7 @@ export const sendMessage = async (req, res) => {
         let media_url = "";
         let message_type = file ? "image" : "text";
 
-        // Upload image if exists
+        // If image exists → upload to ImageKit
         if (file) {
             const buffer = fs.readFileSync(file.path);
 
@@ -58,7 +66,7 @@ export const sendMessage = async (req, res) => {
                 ]
             });
 
-            fs.unlinkSync(file.path); // remove temp file
+            fs.unlinkSync(file.path); // delete temp file
         }
 
         // Create message
@@ -70,15 +78,14 @@ export const sendMessage = async (req, res) => {
             media_url
         });
 
-        // Response
+        // Normal API response
         res.json({ success: true, message });
 
-        // Populate sender details for SSE
-        const populatedMsg = await Message
-            .findById(message._id)
+        // Populate sender info for SSE
+        const populatedMsg = await Message.findById(message._id)
             .populate("from_user_id");
 
-        // Send realtime SSE
+        // Realtime SSE push
         if (connections[to_user_id]) {
             connections[to_user_id].write(
                 `data: ${JSON.stringify(populatedMsg)}\n\n`
@@ -91,7 +98,9 @@ export const sendMessage = async (req, res) => {
     }
 };
 
-// GET CHAT MESSAGES
+// =========================
+// 🔥 GET CHAT MESSAGES
+// =========================
 export const getChatMessages = async (req, res) => {
     try {
         const { userId } = req.auth();
@@ -118,8 +127,9 @@ export const getChatMessages = async (req, res) => {
     }
 };
 
-// GET USER RECENT MESSAGES
-
+// =========================
+// 🔥 GET USER RECENT MESSAGES
+// =========================
 export const getUserRecentMessages = async (req, res) => {
     try {
         const { userId } = req.auth();
