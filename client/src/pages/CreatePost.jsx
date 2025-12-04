@@ -3,7 +3,7 @@ import { Image, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useSelector } from 'react-redux'
 import { useAuth } from '@clerk/clerk-react'
-import api from '../api/axios'
+import api from '../api/axios.js'
 import { useNavigate } from 'react-router-dom'
 
 const CreatePost = () => {

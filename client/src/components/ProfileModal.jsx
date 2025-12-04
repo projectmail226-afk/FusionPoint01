@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { dummyUserData } from '../assets/assets'
 import { Pencil } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from '../features/user/userSlice';
+import { updateUser } from '../features/user/userSlice.js';
 import { useAuth } from '@clerk/clerk-react';
 import toast from 'react-hot-toast';
 

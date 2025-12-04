@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { dummyStoriesData } from '../assets/assets'
 import { Plus } from 'lucide-react'
 import moment from 'moment'
-import StoryModal from './StoryModal'
-import StoryViewer from './StoryViewer'
+import StoryModal from './StoryModal.jsx'
+import StoryViewer from './StoryViewer.jsx'
 import { useAuth } from '@clerk/clerk-react'
-import api from '../api/axios'
+import api from '../api/axios.js'
 import toast from 'react-hot-toast'
 
 const Storiesbar = () => {

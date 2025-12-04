@@ -5,7 +5,7 @@ import { dummyUserData } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useAuth } from '@clerk/clerk-react'
-import api from '../api/axios'
+import api from '../api/axios.js'
 import toast from 'react-hot-toast'
 
 const PostCard = ({ post }) => {

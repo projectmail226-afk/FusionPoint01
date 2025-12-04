@@ -2,7 +2,7 @@ import { useAuth } from '@clerk/clerk-react'
 import { ArrowLeft, Sparkle, Upload, Type } from 'lucide-react'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
-import api from '../api/axios'
+import api from '../api/axios.js'
 
 const StoryModal = ({ setShowModal, fetchStories }) => {
 

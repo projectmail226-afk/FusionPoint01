@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { assets } from '../assets/assets'
-import Loading from '../components/Loading'
-import Storiesbar from '../components/Storiesbar'
-import PostCard from '../components/PostCard'
-import RecentMessages from '../components/RecentMessages'
+import Loading from '../components/Loading.jsx'
+import Storiesbar from '../components/StoriesBar.jsx'
+import PostCard from '../components/PostCard.jsx'
+import RecentMessages from '../components/RecentMessages.jsx'
 import { useAuth } from '@clerk/clerk-react'
-import api from '../api/axios'
+import api from '../api/axios.js'
 import toast from 'react-hot-toast'
 
 const Feed = () => {
