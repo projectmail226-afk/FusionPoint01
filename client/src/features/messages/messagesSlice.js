@@ -1,53 +1,67 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import api from '../../api/axios'
 
-// Fetch messages for a specific user
+// Fetch all messages
 export const fetchMessages = createAsyncThunk(
-  "messages/fetchMessages",
-  async ({ token, userId }) => {
-    const res = await axios.get(
-      `${import.meta.env.VITE_BASEURL}/api/message/${userId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    return res.data.messages;
+  'messages/fetchMessages',
+  async (connectionId, thunkAPI) => {
+    try {
+      const res = await api.get(`/messages/${connectionId}`)
+      return res.data.messages
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message)
+    }
   }
-);
+)
+
+// Add a new message
+export const addMessage = createAsyncThunk(
+  'messages/addMessage',
+  async ({ connectionId, content }, thunkAPI) => {
+    try {
+      const res = await api.post(`/messages/${connectionId}`, { content })
+      return res.data.message
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message)
+    }
+  }
+)
 
 const messagesSlice = createSlice({
-  name: "messages",
+  name: 'messages',
   initialState: {
-    messages: [],
+    items: [],
     loading: false,
     error: null,
   },
   reducers: {
-    // 👇 THIS FUNCTION MUST EXIST (Vercel error fixed)
-    addMessage: (state, action) => {
-      state.messages.push(action.payload);
-    },
-
-    // If you want to replace all messages at once
-    setMessages: (state, action) => {
-      state.messages = action.payload;
+    resetMessages: (state) => {
+      state.items = []
+      state.error = null
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMessages.pending, (state) => {
-        state.loading = true;
+        state.loading = true
       })
       .addCase(fetchMessages.fulfilled, (state, action) => {
-        state.loading = false;
-        state.messages = action.payload;
+        state.loading = false
+        state.items = action.payload
       })
       .addCase(fetchMessages.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
-  },
-});
+        state.loading = false
+        state.error = action.payload
+      })
 
-export const { addMessage, setMessages } = messagesSlice.actions;
-export default messagesSlice.reducer;
+      .addCase(addMessage.fulfilled, (state, action) => {
+        state.items.push(action.payload)
+      })
+      .addCase(addMessage.rejected, (state, action) => {
+        state.error = action.payload
+      })
+  },
+})
+
+export const { resetMessages } = messagesSlice.actions
+export default messagesSlice.reducer
